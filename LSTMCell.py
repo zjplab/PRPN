@@ -21,7 +21,7 @@ class LSTMCell(RNNCellBase):
 
     def __init__(self, input_size, hidden_size, bias=True, dropout=0):
         #super(LSTMCell, self).__init__(intput_size, hidden_size, bias, 4)
-        super().__init__(input_size, hidden_size, bias, 4)
+        super().__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.bias = bias
