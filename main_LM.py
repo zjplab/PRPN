@@ -11,6 +11,7 @@ from torch.autograd import Variable
 
 import data
 from model_PRPN import PRPN
+import pdb
 
 parser = argparse.ArgumentParser(description='PennTreeBank PRPN Language Model')
 parser.add_argument('--data', type=str, default='./data/penn',
@@ -171,6 +172,7 @@ def train():
         data, targets = get_batch(train_data, i)
         # Starting each batch, we detach the hidden state from how it was previously produced.
         # If we didn't, the model would try backpropagating all the way to start of the dataset.
+        pdb.set_trace()
         hidden = repackage_hidden(hidden)
         optimizer.zero_grad()
         output, hidden = model(data, hidden)
