@@ -178,7 +178,7 @@ def evaluate(data_source):
         output, hidden = model(data, hidden)
         output_flat = output.view(-1, ntokens)
         total_loss += eval_batch_size * criterion(output_flat, targets, mask).data
-    return total_loss[0] / (len(data_source) * eval_batch_size)
+    return total_loss / (len(data_source) * eval_batch_size)
 
 
 def train():
@@ -206,7 +206,7 @@ def train():
         train_loss += loss.data
 
         if batch % args.log_interval == 0 and batch > 0:
-            cur_loss = total_loss[0] / args.log_interval
+            cur_loss = total_loss / args.log_interval
             elapsed = time.time() - start_time
             print('| epoch {:3d} | {:5d}/{:5d} batches | lr {:02.2f} | ms/batch {:5.2f} | '
                   'loss {:5.2f} | ppl {:8.2f}'.format(
@@ -215,7 +215,7 @@ def train():
             total_loss = 0
             start_time = time.time()
 
-    return train_loss[0] / batch
+    return train_loss / batch
 
 
 # Loop over epochs.
