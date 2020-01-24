@@ -12,7 +12,7 @@ class ParsingNetwork(nn.Module):
         self.nhid = nhid
         self.ninp = ninp
         self.nslots = nslots
-        self.nlookback = nlookback
+        self.nlookback = nlookback #Kernel windows size L
         self.resolution = resolution
         self.hard = hard
 
@@ -20,11 +20,11 @@ class ParsingNetwork(nn.Module):
 
         # Attention layers
         self.gate = nn.Sequential(nn.Dropout(dropout),
-                                  nn.Conv1d(ninp, nhid, (nlookback + 1)),
+                                  nn.Conv1d(ninp, nhid, (nlookback + 1)), #kernel_size=nlookback+1
                                   nn.BatchNorm1d(nhid),
                                   nn.ReLU(),
                                   nn.Dropout(dropout),
-                                  nn.Conv1d(nhid, 2, 1, groups=2),
+                                  nn.Conv1d(nhid, 2, 1, groups=2), #kernel_size=1, group=2 
                                   nn.Sigmoid())
 
     def forward(self, emb, parser_state):
