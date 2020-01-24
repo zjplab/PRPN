@@ -129,8 +129,8 @@ criterion = nn.CrossEntropyLoss()
 
 def repackage_hidden(h):
     """Wraps hidden states in new Variables, to detach them from their history."""
-    if type(h) == Variable:
-        return Variable(h.data)
+    if type(h) == Variable or type(h)==torch.Tensor:
+        return Variable(h.data) #Variable API is deprecated
     else:
         if isinstance(h, list):
             return [repackage_hidden(v) for v in h]
