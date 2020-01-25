@@ -11,7 +11,7 @@ from torch.autograd import Variable
 
 import data
 from model_PRPN import PRPN
-import pdb
+import os
 
 parser = argparse.ArgumentParser(description='PennTreeBank PRPN Language Model')
 parser.add_argument('--data', type=str, default='./data/penn',
@@ -68,6 +68,8 @@ args = parser.parse_args()
 
 torch.cuda.set_device(args.device)
 
+#Set up the saving folder
+os.makedirs(os.path.dirname(args.save), exist_ok=True)
 # Set the random seed manually for reproducibility.
 torch.manual_seed(args.seed)
 if torch.cuda.is_available():
