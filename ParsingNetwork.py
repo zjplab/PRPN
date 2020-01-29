@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-
+import pdb
 
 class ParsingNetwork(nn.Module):
     def __init__(self, ninp, nhid, nslots=5, nlookback=1, resolution=0.1, dropout=0.4, hard=False):
@@ -11,7 +11,7 @@ class ParsingNetwork(nn.Module):
 
         self.nhid = nhid
         self.ninp = ninp
-        self.nslots = nslots
+        self.nslots = nslots #default 5
         self.nlookback = nlookback #Kernel windows size L
         self.resolution = resolution
         self.hard = hard
@@ -30,7 +30,7 @@ class ParsingNetwork(nn.Module):
     def forward(self, emb, parser_state):
         emb_last, cum_gate = parser_state
         ntimestep = emb.size(0)
-
+        pdb.set_trace()
         emb_last = torch.cat([emb_last, emb], dim=0)
         emb = emb_last.transpose(0, 1).transpose(1, 2)  # bsz, ninp, ntimestep + nlookback
 

@@ -83,7 +83,7 @@ if torch.cuda.is_available():
 ###############################################################################
 
 corpus = data.Corpus(args.data)
-
+#corpus: torch.LongTensor(tokens) containing all the tokens 
 
 def batchify(data, bsz, random_start_idx=False):
     # Work out how cleanly we can divide the dataset into bsz parts.
@@ -141,6 +141,10 @@ def repackage_hidden(h):
 
 
 def get_batch(source, i, evaluation=False):
+    '''
+    source: training data, torch.LongTensor
+    i: starting index of this batch data 
+    '''
     seq_len = min(args.bptt, len(source) - 1 - i)
     data = Variable(source[i:i + seq_len], volatile=evaluation)
     target = Variable(source[i + 1:i + 1 + seq_len].view(-1))
@@ -170,7 +174,7 @@ def train():
     ntokens = len(corpus.dictionary)
     hidden = model.init_hidden(args.batch_size)
     train_data = batchify(corpus.train, args.batch_size, random_start_idx=True)
-    for batch, i in enumerate(range(0, train_data.size(0) - 1, args.bptt)):
+    for batch, i in enumerate(range(0, train_data.size(0) - 1, args.bptt)): #bptt, sequence length: 35
         data, targets = get_batch(train_data, i)
         # Starting each batch, we detach the hidden state from how it was previously produced.
         # If we didn't, the model would try backpropagating all the way to start of the dataset.
@@ -206,7 +210,7 @@ scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', 0.5, patience=2, th
 
 # At any point you can hit Ctrl + C to break out of training early.
 try:
-    for epoch in range(1, args.epochs + 1):
+    for epoch in range(1, args.epochs + 1): #100 epoches 
         epoch_start_time = time.time()
         train()
         val_loss = evaluate(val_data)
