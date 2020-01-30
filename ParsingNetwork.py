@@ -28,19 +28,18 @@ class ParsingNetwork(nn.Module):
                                   nn.Sigmoid())
 
     def forward(self, emb, parser_state):
-        emb_last, cum_gate = parser_state
-        ntimestep = emb.size(0)
-        pdb.set_trace()
-        emb_last = torch.cat([emb_last, emb], dim=0)
-        emb = emb_last.transpose(0, 1).transpose(1, 2)  # bsz, ninp, ntimestep + nlookback
+        emb_last, cum_gate = parser_state #5, 64, 800   64,15
+        ntimestep = emb.size(0) #5
+        emb_last = torch.cat([emb_last, emb], dim=0) #emb: 35,64,800 => 40,64,800
+        emb = emb_last.transpose(0, 1).transpose(1, 2)  # bsz, ninp, ntimestep + nlookback: 64, 800, 40
 
         gates = self.gate(emb)  # bsz, 2, ntimestep
-        gate = gates[:, 0, :]
+        gate = gates[:, 0, :] #64,35
         gate_next = gates[:, 1, :]
-        cum_gate = torch.cat([cum_gate, gate], dim=1)
+        cum_gate = torch.cat([cum_gate, gate], dim=1) #64,50
         gate_hat = torch.stack([cum_gate[:, i:i + ntimestep] for i in range(self.nslots, 0, -1)],
                                dim=2)  # bsz, ntimestep, nslots
-
+        pdb.set_trace()
         if self.hard:
             memory_gate = (F.hardtanh((gate[:, :, None] - gate_hat) / self.resolution * 2 + 1) + 1) / 2
         else:
